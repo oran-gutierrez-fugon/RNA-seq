@@ -1,0 +1,1 @@
+STAR --runThreadN 30 --runMode genomeGenerate genomeDir /share/lasallelab/Oran/dovetail/luhmes/RNAseq/star_150 --genomeFastaFiles /share/lasallelab/Oran/dovetail/refgenomes/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna --sjdbGTFfile /share/lasallelab/Oran/dovetail/refgenomes/hg38.refGene.gtf --sjdbOverhang 150
