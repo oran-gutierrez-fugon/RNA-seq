@@ -45,8 +45,8 @@ align(){
   cd ${mappath}
 
   call="STAR \
-  --runThreadN 8 \
-  --genomeDir /share/lasallelab/Oran/dovetail/luhmes/RNAseq/star_150
+  --runThreadN 10 \
+  --genomeDir /share/lasallelab/Oran/dovetail/luhmes/RNAseq/GenomeDir
   --readFilesIn ${trim1} ${trim2} \
   --readFilesCommand zcat \
   --outFilterType BySJout \
@@ -85,11 +85,11 @@ export -f align
 ################
 
 export mainPath="/share/lasallelab"
-module load star/2.7.3a
+module load star/2.7.3a #probably shoud go at the beginning of everything
 module load samtools/1.11
 export PYTHON_EGG_CACHE="${mainPath}/programs/CpG_Me"
 module load trim_galore/0.6.6
-source activate cutadapt-4.1
+conda activate cutadapt-3.4 (just need to load env once)
 
 #######
 # Run #

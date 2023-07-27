@@ -16,15 +16,14 @@ stopifnot(suppressMessages(sapply(packages, require, character.only = TRUE)))
 
 #BiocManager::install("ben-laufer/DMRichR")
 
-# To test and develop, assign the variable Treatment and then just run the main sections
+# To test and develop, assign the variable Condition and then just run the main sections
 
 sink("RNA-seq_log.txt", type = "output", append = FALSE, split = TRUE)
 
-tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
-                sex = c("female")) %>% 
-  purrr::pwalk(function(Treatment, sex){
+tidyr::crossing(Condition = c("Non-Neurons", "Mature Neurons")) %>% 
+  purrr::pwalk(function(Condition){
                
-               dir.create(glue::glue("{Treatment}_{sex}"))
+               dir.create(glue::glue("{Condition}"))
   
   # Count Matrix ------------------------------------------------------------
   
@@ -65,26 +64,20 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
   # Design Matrix -----------------------------------------------------------
   
   designMatrix <- readxl::read_xlsx("sample_info.xlsx") %>%
-    dplyr::rename(group = Treatment) %>% 
+    dplyr::rename(group = Condition) %>% 
     dplyr::mutate_if(is.character, as.factor) %>%
     dplyr::mutate(Name = as.character(Name))
-  
-  # # Recode sex
-  # designMatrix$Sex <- as.character(designMatrix$Sex)
-  # designMatrix$Sex[designMatrix$Sex  == "F"] <- "0"
-  # designMatrix$Sex[designMatrix$Sex  == "M"] <- "1"
-  # designMatrix$Sex <- as.factor(designMatrix$Sex)
   
   samples.idx <- pmatch(designMatrix$Name, colnames(countMatrix))
   designMatrix <- designMatrix[order(samples.idx),]
   
   # Preprocessing -----------------------------------------------------------
   
-  print(glue::glue("Preprocessing {sex} {Treatment} samples"))
+  print(glue::glue("Preprocessing {Condition} samples"))
  
   # Select sample subset
   designMatrix <- designMatrix %>%
-    dplyr::filter(Treatment == Treatment & Sex == sex)
+    dplyr::filter(Condition == Condition)
   
   countMatrix <- countMatrix %>%
     dplyr::select(contains(designMatrix$Name)) %>% 
@@ -126,7 +119,7 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
   nsamples <- ncol(countMatrix)
   col <- brewer.pal(nsamples, "Paired")
   
-  pdf(glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_density_plot.pdf"), height = 8.5, width = 11)
+  pdf(glue::glue("{Condition}/{Condition}_density_plot.pdf"), height = 8.5, width = 11)
   par(mfrow = c(1,2))
   
   plot(density(logCPM[,1]), col = col[1], lwd = 2, las = 2, main = "", xlab = "")
@@ -152,7 +145,7 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
   filterCount <- dim(countMatrix)
   
   print(glue::glue("{100 - round((filterCount[1]/rawCount[1])*100)}% of genes were filtered from {rawCount[2]} samples, \\
-             where there were {rawCount[1]} genes before filtering and {filterCount[1]} genes after filtering for {Treatment}"))
+             where there were {rawCount[1]} genes before filtering and {filterCount[1]} genes after filtering for {Condition}"))
   
   # Filtered density plot of log-CPM values 
   logCPM <- cpm(countMatrix, log = TRUE)
@@ -171,7 +164,7 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
                     groups = designMatrix,
                     path = getwd(),
                     folder = "interactivePlots",
-                    html = glue::glue("{Treatment}_{sex}_MDS-Plot"),
+                    html = glue::glue("{Condition}_MDS-Plot"),
                     launch = FALSE)
 
   # Surrogate variables analysis --------------------------------------------
@@ -198,19 +191,19 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
   #                 n.sv = nSv)
   # 
   # # Update model to include surrogate variables
-  # mm <- model.matrix(~Treatment + svObj$sv,
+  # mm <- model.matrix(~Condition + svObj$sv,
   #                    data = designMatrix)
   
   # Voom transformation and calculation of variance weights -----------------
   
-  print(glue::glue("Normalizing {sex} {Treatment} samples"))
+  print(glue::glue("Normalizing {Condition} samples"))
   
   # Design
   mm <- model.matrix(~group,
                      data = designMatrix)
   
   # Voom
-  pdf(glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_voom_mean-variance_trend.pdf"), height = 8.5, width = 11)
+  pdf(glue::glue("{Condition}/{Condition}_voom_mean-variance_trend.pdf"), height = 8.5, width = 11)
   voomLogCPM <- voom(countMatrix,
                      mm,
                      plot = TRUE)
@@ -231,7 +224,7 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
   correlations <- correlations$consensus.correlation
   
   # Boxplots of logCPM values before and after normalization
-  pdf(glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_normalization_boxplots.pdf"), height = 8.5, width = 11)
+  pdf(glue::glue("{Condition}/{Condition}_normalization_boxplots.pdf"), height = 8.5, width = 11)
   par(mfrow=c(1,2))
   
   boxplot(logCPM, las = 2, col = col, main = "")
@@ -244,7 +237,7 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
   
   # Fitting linear models in limma ------------------------------------------
   
-  print(glue::glue("Testing {sex} {Treatment} samples for differential expression"))
+  print(glue::glue("Testing {Condition} samples for differential expression"))
   
   # Weight standard errors of log fold changes by within litter correlation 
   fit <- lmFit(voomLogCPM,
@@ -258,18 +251,18 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
   voomLogCPM$E %>%
     as.data.frame() %>% 
     tibble::rownames_to_column(var = "Gene") %>%
-    openxlsx::write.xlsx(glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_voomLogCPMforWGCNA.xlsx"))
+    openxlsx::write.xlsx(glue::glue("{Condition}/{Condition}_voomLogCPMforWGCNA.xlsx"))
   
   # Create DEG tibble -------------------------------------------------------
   
-  print(glue::glue("Creating DEG list of {sex} {Treatment} samples"))
+  print(glue::glue("Creating DEG list of {Condition} samples"))
   
   efit <- fit %>%
     contrasts.fit(coef = 2) %>% # Change for different models
     eBayes() 
   
   # Final model plot
-  pdf(glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_final_model_mean-variance_trend.pdf"),
+  pdf(glue::glue("{Condition}/{Condition}_final_model_mean-variance_trend.pdf"),
       height = 8.5, width = 11)
   
   plotSA(efit, main = "Final model: Mean-variance trend")
@@ -280,7 +273,7 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
   Glimma::glimmaMA(efit,
                    dge = countMatrix,
                    path = getwd(),
-                   html = glue::glue("interactivePlots/{Treatment}_{sex}_MDA-Plot.html"),
+                   html = glue::glue("interactivePlots/{Condition}_MDA-Plot.html"),
                    launch = FALSE)
   
   # Top differentially expressed genes
@@ -292,7 +285,7 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
     dplyr::mutate(FC = dplyr::case_when(logFC > 0 ~ 2^logFC,
                                         logFC < 0 ~ -1/(2^logFC))) %>%
     dplyr::select(SYMBOL, GENENAME, FC, logFC, P.Value, adj.P.Val, AveExpr, t, B, ensgene) %T>%
-    openxlsx::write.xlsx(file = glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_DEGs.xlsx"))
+    openxlsx::write.xlsx(file = glue::glue("{Condition}/{Condition}_DEGs.xlsx"))
   # For a continuous trait the FC is the change per each unit
   
   # Volcano Plot ------------------------------------------------------------
@@ -309,7 +302,7 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
     ggplot2::coord_cartesian(xlim = c(-3, 3),
                              ylim = c(0, 4))
   
-  ggplot2::ggsave(glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_volcano.pdf"),
+  ggplot2::ggsave(glue::glue("{Condition}/{Condition}_volcano.pdf"),
                   plot = volcano,
                   device = NULL,
                   width = 11,
@@ -317,11 +310,11 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
   
   # HTML report -------------------------------------------------------------
   
-  print(glue::glue("Saving html report of {sex} {Treatment} samples"))
+  print(glue::glue("Saving html report of {Condition} samples"))
   
   DEGs <- DEGs %>%
     dplyr::filter(P.Value < 0.05) %T>%
-    openxlsx::write.xlsx(file = glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_filtered_DEGs.xlsx"))
+    openxlsx::write.xlsx(file = glue::glue("{Condition}/{Condition}_filtered_DEGs.xlsx"))
   
   DEGs %>%
     dplyr::rename(Gene = SYMBOL,
@@ -341,11 +334,11 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
       columns = vars("p-value", "adjusted  p-value"),
       decimals = 2) %>%
     as_raw_html(inline_css = TRUE) %>%
-    write(glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_DEGs.html")) 
+    write(glue::glue("{Condition}/{Condition}_DEGs.html")) 
   
   # Heatmap -----------------------------------------------------------------
   
-  print(glue::glue("Plotting heatmap of {sex} {Treatment} samples"))
+  print(glue::glue("Plotting heatmap of {Condition} samples"))
   
   voomLogCPM$E[which(rownames(voomLogCPM$E) %in% DEGs$ensgene),] %>%
     as.matrix() %>% 
@@ -353,7 +346,7 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
                        scale = "row",
                        annotation_col = designMatrix %>%
                          tibble::column_to_rownames(var = "Name") %>% 
-                         dplyr::select(Treatment = group, Litter),
+                         dplyr::select(Condition = group, Litter),
                        color = RColorBrewer::brewer.pal(11, name = "RdBu") %>%
                          rev(),
                        show_colnames = FALSE,
@@ -362,15 +355,15 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
                        border_color = "grey",
                        main = glue::glue("Z-Scores of {nrow(DEGs)} Differentially Expressed Genes"),
                        fontsize = 16,
-                       filename = glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_heatmap.pdf"),
+                       filename = glue::glue("{Condition}/{Condition}_heatmap.pdf"),
                        width = 11,
                        height = 8.5,
-                       annotation_colors = list(Treatment = c("PCB" = "#F8766D",
+                       annotation_colors = list(Condition = c("PCB" = "#F8766D",
                                                              "Control" = "#619CFF")))
  
   # Ontologies and Pathways -------------------------------------------------
   
-  print(glue::glue("Performing GO and pathway analysis of {sex} {Treatment} samples"))
+  print(glue::glue("Performing GO and pathway analysis of {Condition} samples"))
 
   tryCatch({
   DEGs %>% 
@@ -386,21 +379,21 @@ tidyr::crossing(Treatment = c("Non-Neurons", "Mature Neurons"),
                        "RNA-Seq_Disease_Gene_and_Drug_Signatures_from_GEO")) %T>% # %>% 
     #purrr::map(~ dplyr::filter(., Adjusted.P.value < 0.05)) %>% 
     #purrr::map(~ dplyr::filter(., stringr::str_detect(Genes, ";"))) %>% 
-    openxlsx::write.xlsx(file = glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_enrichr.xlsx")) %>%
+    openxlsx::write.xlsx(file = glue::glue("{Condition}/{Condition}_enrichr.xlsx")) %>%
     DMRichR::slimGO(tool = "enrichR",
                     annoDb = "org.Mm.eg.db",
                     plots = FALSE) %T>%
-    openxlsx::write.xlsx(file = glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_rrvgo_enrichr.xlsx")) %>%
+    openxlsx::write.xlsx(file = glue::glue("{Condition}/{Condition}_rrvgo_enrichr.xlsx")) %>%
     DMRichR::GOplot() %>%
-    ggplot2::ggsave(glue::glue("{Treatment}_{sex}/{Treatment}_{sex}_enrichr_plot.pdf"),
+    ggplot2::ggsave(glue::glue("{Condition}/{Condition}_enrichr_plot.pdf"),
                     plot = .,
                     device = NULL,
                     height = 8.5,
                     width = 10) },
   error = function(error_condition) {
-    print(glue::glue("ERROR: Gene Ontology pipe didn't finish for {sex} {Treatment}"))
+    print(glue::glue("ERROR: Gene Ontology pipe didn't finish for {Condition}"))
   })
-  print(glue::glue("The pipeline has finished for {sex} {Treatment} samples"))
+  print(glue::glue("The pipeline has finished for {Condition} samples"))
 })
 
 sink()

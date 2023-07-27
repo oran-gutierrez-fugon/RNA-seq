@@ -43,7 +43,7 @@ eval $call
 ########
 
 mkdir GeneCounts
-"$(find `.` -name '*ReadsPerGene.out.tab' -print0 | xargs -0 cp -t GeneCounts)"
+find `.` -name '*ReadsPerGene.out.tab' -print0 | xargs -0 cp -t GeneCounts
 
 ###################
 # Run Information #

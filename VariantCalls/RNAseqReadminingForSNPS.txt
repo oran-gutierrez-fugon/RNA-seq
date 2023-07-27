@@ -1,0 +1,381 @@
+#In VCF file format first variant is reference and second is from read. Next column gives a quality score
+#In the last column will see 0/0 if homozygous to reference, 1/1 if homozygous alternative to reference, 1/0 or 0/1 if Heterozygous, 1/2 if 2 #alternate alleles from reference is found, this is followed by the number of reads for each one separated by a dot or comma
+
+From start of uncharacterized block over UBE3A
+
+##############Minus strand####################
+Looking at it from the Maternal UBE3A perspective::::
+
+
+For Negative strand of Neuron 1 sample N1A_S80_L004
+
+1.
+chr15:25604565 (hg19)
+chr15:25359418 (hg38)
+Reads show Heterozygous with both haplotypes (10 reads for top block, 5 reads from bottom but quality score is 439)
+
+2.
+chr15:25609183-25609183 (hg19)
+chr15:25364036-25364036
+No read matches found
+
+3.
+chr15:25642289-25642289
+chr15:25397142-25397142
+No read matches found
+
+4.
+chr15:25654670-25654670
+chr15:25409523-25409523
+No read matches found
+
+5. 
+chr15:25661789-25661790 (hg19)
+chr15:25416642-25416643 (hg38)
+Mat read shows as TAA but Loupe shows TA for bottom blocks
+
+6.
+chr15:25663882-25663882 (hg19)
+chr15:25418735-25418735 (hg38)
+Mat read shows as C which corresponds to Top block in loupe but read quality is 49
+
+7.
+chr15:25680378-25680378 (hg19)
+chr15:25435231-25435231 (hg38)
+In read quality mat shows del of AC, in loupe corresponds to bottom blocks
+
+
+
+For Negative strand of Neuron 2 sample 
+
+1.
+chr15:25604565-25604565 (hg19)
+chr15:25359418-25359418 (hg38)
+Ref CGTGTGTGTGT
+Haplotype 1: C
+Haplotype 2: CGTGTGTGTGTGTGT
+None found in reads
+
+2.
+chr15:25609183-25609183 (hg19)
+chr15:25364036-25364036 (hg38)
+Ref T
+Haplotype 1: TAATA
+haplotype 2: T
+Read shows TAATA which corresponds to top block in loupe
+Quality score 109
+
+3.
+chr15:25642289-25642289 (hg19)
+chr15:25397142-25397142 (hg38)
+Ref G
+Haplotype 1: G
+Haplotype 2: A
+Read shows A which corresponds to bottom block in loupe
+Quality score is 236
+
+4.
+chr15:25654670-25654670 (hg19)
+chr15:25409523-25409523 (hg38)
+Ref T
+Haplotype 1: TA
+Haplotype 2: T
+None found in reads
+
+
+
+5. 
+chr15:25661789-25661790 (hg19)
+chr15:25416642-25416643 (hg38)
+Ref T
+Haplotype 1: T
+Haplotype 2: TA
+None found in reads
+
+
+6.
+chr15:25663882-25663882 (hg19)
+chr15:25418735-25418735 (hg38)
+Ref T
+Haplotype 1: C
+Haplotype 2: T
+None found in reads
+
+7.
+chr15:25680378-25680378 (hg19)
+chr15:25435231-25435231 (hg38)
+Ref TAC
+Haplotype 1: TAC
+Haplotype 2: T
+Reads show T which corresponds to bottom block
+Quality score is 175
+
+
+For Negative strand of Neuron 3 sample 
+
+1.
+chr15:25604565-25604565 (hg19)
+chr15:25359418-25359418 (hg38)
+Ref CGTGTGTGTGT
+Haplotype 1: C
+Haplotype 2: CGTGTGTGTGTGTGT
+Read shows heterozygosity
+Quality score is 109
+Only 2 reads of C and 1 of haplotype 2
+
+2.
+chr15:25609183-25609183 (hg19)
+chr15:25364036-25364036 (hg38)
+Ref T
+Haplotype 1: TAATA
+haplotype 2: T
+None found in reads
+
+3.
+chr15:25642289-25642289 (hg19)
+chr15:25397142-25397142 (hg38)
+Ref G
+Haplotype 1: G
+Haplotype 2: A
+None found in reads
+
+4.
+chr15:25654670-25654670 (hg19)
+chr15:25409523-25409523 (hg38)
+Ref T
+Haplotype 1: TA
+Haplotype 2: T
+None found in reads
+
+
+5. 
+chr15:25661789-25661790 (hg19)
+chr15:25416642-25416643 (hg38)
+Ref T
+Haplotype 1: T
+Haplotype 2: TA
+None found in reads
+
+
+6.  Started checking for heterozygosity and amount of reads
+chr15:25663882-25663882 (hg19)
+chr15:25418735-25418735 (hg38)
+Ref T
+Haplotype 1: C
+Haplotype 2: T
+Reads show C which indicates top block
+Quality score is 60 Heterozygous 3 of Ref T and 2 reads of C
+
+
+7.
+chr15:25680378-25680378 (hg19)
+chr15:25435231-25435231 (hg38)
+Ref TAC
+Haplotype 1: TAC
+Haplotype 2: T
+Reads show T which corresponds to bottom block
+Quality score is 129 Heterozygous 5 reads of each
+
+
+##############Forward strand
+Looking at it from the paternal perspective::::
+
+For Positive strand of Undifferentiated 1 sample 
+
+
+1.
+chr15:25604565-25604565 (hg19)
+chr15:25359418-25359418 (hg38)
+Ref CGTGTGTGTGT
+Haplotype 1: C
+Haplotype 2: CGTGTGTGTGTGTGT
+Read shows only C which corresponds to top block in loupe
+
+2.
+chr15:25609183-25609183 (hg19)
+chr15:25364036-25364036 (hg38)
+Ref T
+Haplotype 1: TAATA
+haplotype 2: T
+Read shows TAATA which corresponds to top block in loupe
+
+3.
+chr15:25642289-25642289 (hg19)
+chr15:25397142-25397142 (hg38)
+Ref G
+Haplotype 1: G
+Haplotype 2: A
+Read shows A which corresponds to bottom block in loupe
+Quality score is 111
+
+4.
+chr15:25654670-25654670 (hg19)
+chr15:25409523-25409523 (hg38)
+Ref T
+Haplotype 1: TA
+Haplotype 2: T
+None found in reads
+
+
+
+5. 
+chr15:25661789-25661790 (hg19)
+chr15:25416642-25416643 (hg38)
+Ref T
+Haplotype 1: T
+Haplotype 2: TA
+None found in reads
+
+
+6.
+chr15:25663882-25663882 (hg19)
+chr15:25418735-25418735 (hg38)
+Ref T
+Haplotype 1: C
+Haplotype 2: T
+None found in reads
+
+
+
+7.
+chr15:25680378-25680378 (hg19)
+chr15:25435231-25435231 (hg38)
+Ref TAC
+Haplotype 1: TAC
+Haplotype 2: T
+Reads show T which corresponds to bottom block
+Quality score is 107
+
+########### Undifferentiated 2 reads #########f
+
+1.
+chr15:25604565-25604565 (hg19)
+chr15:25359418-25359418 (hg38)
+Ref CGTGTGTGTGT
+Haplotype 1: C
+Haplotype 2: CGTGTGTGTGTGTGT
+None found in reads
+
+2.
+chr15:25609183-25609183 (hg19)
+chr15:25364036-25364036 (hg38)
+Ref T
+Haplotype 1: TAATA
+haplotype 2: T
+None found in reads
+
+3.
+chr15:25642289-25642289 (hg19)
+chr15:25397142-25397142 (hg38)
+Ref G
+Haplotype 1: G
+Haplotype 2: A
+None found in reads
+
+4.
+chr15:25654670-25654670 (hg19)
+chr15:25409523-25409523 (hg38)
+Ref T
+Haplotype 1: TA
+Haplotype 2: T
+None found in reads
+
+
+5. 
+chr15:25661789-25661790 (hg19)
+chr15:25416642-25416643 (hg38)
+Ref T
+Haplotype 1: T
+Haplotype 2: TA
+None found in reads
+
+
+6.  Started checking for heterozygosity and amount of reads
+chr15:25663882-25663882 (hg19)
+chr15:25418735-25418735 (hg38)
+Ref T
+Haplotype 1: C
+Haplotype 2: T
+None found in reads
+
+
+
+7.
+chr15:25680378-25680378 (hg19)
+chr15:25435231-25435231 (hg38)
+Ref TAC
+Haplotype 1: TAC
+Haplotype 2: T
+None found in reads
+
+
+########### Undifferentiated 2 reads #########f
+
+1.
+chr15:25604565-25604565 (hg19)
+chr15:25359418-25359418 (hg38)
+Ref CGTGTGTGTGT
+Haplotype 1: C
+Haplotype 2: CGTGTGTGTGTGTGT
+231.02 1/2:2,4,5
+
+2.
+chr15:25609183-25609183 (hg19)
+chr15:25364036-25364036 (hg38)
+Ref T
+Haplotype 1: TAATA
+haplotype 2: T
+Reads show TAATA which corresponds to the top block
+Heterozygous 109.60 0/1:3,3
+
+3.
+chr15:25642289-25642289 (hg19)
+chr15:25397142-25397142 (hg38)
+Ref G
+Haplotype 1: G
+Haplotype 2: A
+None found in reads
+
+4.
+chr15:25654670-25654670 (hg19)
+chr15:25409523-25409523 (hg38)
+Ref T
+Haplotype 1: TA
+Haplotype 2: T
+None found in reads
+
+
+5. 
+chr15:25661789-25661790 (hg19)
+chr15:25416642-25416643 (hg38)
+Ref T
+Haplotype 1: T
+Haplotype 2: TA
+None found in reads
+
+
+6.  Started checking for heterozygosity and amount of reads
+chr15:25663882-25663882 (hg19)
+chr15:25418735-25418735 (hg38)
+Ref T
+Haplotype 1: C
+Haplotype 2: T
+None found in reads
+
+
+
+7.
+chr15:25680378-25680378 (hg19)
+chr15:25435231-25435231 (hg38)
+Ref TAC
+Haplotype 1: TAC
+Haplotype 2: T
+Shows T which corresponds to Haplotype 2 but
+Heterozygous 244.60 0/1:7,9
+#Explanation of numbers in previous line
+# is quality score followed by conventional annotation 0/1 which means Heterozygous after the colon : is the amount of reads of each one, so in this case 7 reads of the reference and 9 of the alternative which is T corresponding to Haplotype 2 in 10X sequencing.  
+Need to look back at all of previous results because I did not look for the heterozygosity indicator so some may also have the reference allele read (so both blocks)
+Can try to filter only homozygous reads but can already conclude that these are not really strand specific or did not use the correct way of filtering them, will also consult with the core and google about their method of finding strandedness.  For this assay I used ribodepletion prep as part of their RNA-seq package.
+
+
+
