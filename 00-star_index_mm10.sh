@@ -75,8 +75,8 @@ call="STAR \
 --runThreadN 30 \
 --runMode genomeGenerate \
 --genomeDir star_150/ \
---genomeFastaFiles Mus_musculus.GRCm38.dna.primary_assembly.fa \
---sjdbGTFfile Mus_musculus.GRCm38.102.gtf \
+--genomeFastaFiles Homo_sapiens.GRCh37.dna_sm.primary_assembly.fa \
+--sjdbGTFfile Homo_sapiens.GRCh37.87.gtf \
 --sjdbOverhang 149"
 
 echo $call
